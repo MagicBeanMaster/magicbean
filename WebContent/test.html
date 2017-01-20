@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo</title>
+	<link rel="stylesheet" href="bootstrap.min.css">
+	<link rel="stylesheet" href="alert.css">
+</head>
+<body>
+	<!-- 弹出框 begin -->
+	<div id="modalPane" class="modal-warp">
+		<div class="modal2">
+			<div class="title">系统提示<span class="glyphicon glyphicon-remove" id="modalCancel"></span></div>
+			<div class="content">
+				内容放这里......
+			</div>
+		</div>
+	</div>
+	<!-- 弹出框 end -->
+
+	<button id="alertTest">show alert</button>
+	<button id="confirmTest">show comfirm</button>
+	<button id="modalTest">show modal</button>
+
+	<script src="jquery.min.js"></script>
+	<script src="alert.js"></script>
+	<script>
+	$(function(){
+		AlertFun("alert",{
+			width:"600",   //宽度
+			backgroundTitle:"red",   //title背景颜色
+			backgroundBtn:"#31b0d5"   //button背景颜色
+		});
+		// ---------------------    test   -------------------------------
+		//alert test
+		$("#alertTest").on("click",function(){
+			AlertFun("alert",{
+				width:"600",   //宽度
+				backgroundTitle:"#00ABFF",   //title背景颜色
+				backgroundBtn:"#31b0d5"   //button背景颜色
+			});
+		});
+
+		//confirm test
+		$("#confirmTest").on("click",function(){
+			ConfirmFun("你确定要删除吗",function(flag){
+				if(flag){
+					AlertFun("success");
+
+					//做确定的事
+					//...
+				}
+			},{
+				width:600,
+				backgroundTitle:"red",
+				backgroundBtn:"#ccc"
+			});  
+
+		});
+
+		//modal test 
+		//show
+		$("#modalTest").on("click",function(){
+			$("#modalPane").show();
+
+			alert("这里处理事务");
+
+				//做其他事
+				//...
+		});
+
+		//hide
+		$("#modalCancel").on("click",function(){
+			$("#modalPane").hide();
+		});
+	});
+	</script>
+
+</body>
+</html>

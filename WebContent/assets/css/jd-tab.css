@@ -1,0 +1,5 @@
+.nav-tabs{border:none;}
+.nav-tabs>li{margin-right: 15px;}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {color: #307de9;border: 1px solid #307de9;background: #f4f9ff;box-shadow: 1px 1px 1px #b1cd91;-webkit-box-shadow: 1px 1px 1px #b1cd91;-moz-box-shadow: 1px 1px 1px #b1cd91;-ms-box-shadow: 1px 1px 1px #b1cd91;}
+.nav-tabs>li>a:hover {border:1px solid #f0f1f2;color: #307de9;}
+.nav-tabs>li>a{padding:5px;color:#333;border-radius: 2px !important;}

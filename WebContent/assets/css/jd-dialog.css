@@ -1,0 +1,26 @@
+/* alert
+	==========  */
+.alert-warp,.confirm-warp{position: fixed;top:0;bottom:0;left:0;right:0;width: 100%;z-index: 9999;background: rgba(0,0,0,0.5);}
+.alert-warp .alert,.confirm-warp .confirm{position: fixed;left:0;right:0;top:16%;margin: 0 auto;padding:0;border: 1px solid #e3e8ef;background: #fff;}
+.alert-warp .alert .title,.confirm-warp .confirm .title{padding: 10px 0;margin-left: 15px;margin-right: 15px;font-size: 14px;font-weight: 600;color: #666;border-bottom: 1px solid #e3e8ef;}
+.alert-warp .alert .content{padding: 24px 0;margin-left: 15px;margin-right: 15px;font-size: 14px;}
+.alert-warp .alert .text-right,.confirm-warp .confirm .text-right{padding: 0 8px 5px 0;}
+.confirm-warp .confirm .content{padding: 24px 0;margin-left: 15px;margin-right: 15px;font-size: 14px;}
+.confirm-warp .confirm .content img{width: 24px;margin-right: 2px;vertical-align: bottom;}
+.confirm-warp .confirm .content span{vertical-align: bottom;}
+.confirm-warp .confirm .text-right button{margin-left: 5px;}  
+
+.modal-warp{display: none; position: fixed;left:0;right:0;top:0;bottom:0;width: 100%; z-index: 999;background: rgba(0,0,0,0.5);}  
+.modal-warp .modal2{position: relative;width: 90%;max-width:700px; margin: 80px auto 0;padding:0;border: 1px solid #e3e8ef;background-color: #fff;}
+.modal-warp .modal2 .title{padding: 10px 0;border-bottom: 1px solid #e3e8ef;margin-left: 15px;margin-right: 15px;font-size: 14px;font-weight: 600;color: #666;background: #fff;}
+.modal-warp .modal2 .title span{position: absolute;right: 15px;top: 10px;font-size: 14px;cursor: pointer;}
+.modal-warp .modal2 .content{min-height: 240px;max-height: 600px;padding: 24px 0;margin-left: 15px;margin-right: 15px;overflow-y: visible;overflow-x: hidden;}
+.modal-warp .modal2 .content .form-group{margin:5px;}
+.modal-warp .modal2 .content .form-button{margin-top:20px;}
+.modal-warp .modal2 .content .form-button .btn{padding: 7px 14px;}
+.alert-warp strong,.confirm-warp strong{color:red;}
+.modal-warp .modal2 .content .warning,.alert-warp .warning,.confirm-warp .warning{color:red;}
+@media (max-width: 768px){
+	.modal-warp .modal2{width: 95%;margin: 30px auto 0;}
+	.modal-warp .modal2 .content{max-height: 400px;}
+}

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/tx
+         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+         http://www.springframework.org/schema/jdbc 
+         http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	<bean id="springUtils" class="com.base.utils.SpringUtils" />
+	<context:component-scan base-package="com.base.*,com.booty.sys.*">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+	<!-- <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" /> -->
+	<context:property-placeholder location="classpath:db.properties" />
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="${cpool.minPoolSize}" />
+		<property name="minIdle" value="${cpool.minPoolSize}" />
+		<property name="maxActive" value="${cpool.maxPoolSize}" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="${cpool.checkoutTimeout}" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${cpool.checkoutTimeout}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="false" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+		<!-- 配置监控统计拦截的filters -->
+		<property name="filters" value="stat" />
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- JDBC配置 -->
+	<bean id="namedParameterJdbcTemplate"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler"
+		lazy-init="true" />
+	<!-- 数据连接管理 -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 事务控制 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="count*" read-only="true" />
+			<tx:method name="select*" read-only="true" />
+			<tx:method name="load*" read-only="true" />
+			<tx:method name="updateTableDML" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- <bean id="aopServiceMonitor" class="com.base.utils.AopServiceMonitor" /> -->
+	<aop:config>
+	 	<aop:pointcut id="allServiceMethods" expression="execution(* com.base.services..*.*(..))"/>
+    	<!-- <aop:advisor pointcut-ref="allServiceMethods" advice-ref="aopServiceMonitor" order="2"/> -->
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.base.services..*.*(..))" />
+	</aop:config>
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+    <!-- <bean class="com.base.utils.SimpleExceptionResolverUtils">  
+        定义需要特殊处理的异常，用类名或完全路径名作为key，异常也页名作为值  
+        <property name="exceptionMappings">  
+            <props>  
+                <prop key="com.booty.sys.exceptions.JdhjException">error-business</prop>  
+            </props>  
+        </property>  
+    </bean>  
+    <bean id="exceptionHandler" class="com.booty.sys.exceptions.JdhjExceptionHandler"/> -->
+    
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+        <property name="prefix">
+<!--             <value>/WEB-INF/pages/</value> -->
+            <value>/pages/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+        <property name="order" value="2" />
+    </bean>
+    
+</beans>
